@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "Auto Form Filler",
+    "version": "1.0",
+    "description": "Fill out forms automatically",
+    "permissions": ["activeTab"],
+    "browser_action": {
+      "default_popup": "popup.html"
+    }
+  }

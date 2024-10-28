@@ -1,0 +1,25 @@
+Form Filler
+The goal of this project is to create a Chrome extension that acts as an intelligent auto form filler for job applications and other forms. The extension should extract relevant data from the user’s LinkedIn profile (such as name, experience, education, and skills), allowing users to modify the extracted information within the extension and store locally. When filling out a job application or any online form, the extension will automatically fill in the fields with the relevant data or suggest multiple options based on the available information. Users should also have the ability to select specific fields to include or exclude while filling out the form, giving them control over what information is used.
+
+List of features and descriptions:
+1. Customizable Data Fields [40 pts]. Allow users to manually add or edit fields [20 pts] beyond or instead of those extracted from LinkedIn [10 pts], such as certificates, portfolio links, or personal summaries. All the data must be stored in the local storage [10 pts].
+
+2. Profile Switching [10 pts]. Enable users to create multiple profiles (e.g., for different industries or job roles) that they can switch between, depending on the type of application they are filling out.
+
+3. Form Field Mapping [10 pts]. Implement a feature where users can map LinkedIn fields to specific form fields, ensuring accurate form filling even for forms with unique field names.
+
+4. Automatic Cover Letter Generation [BONUS] [20 pts]. The extension will detect the job title and company name from the application and generate a tailored cover letter based on the user’s background, ensuring a quick and relevant application process. You may use free API services only. (E.g., https://ai.google.dev/pricing#1_5flash)
+
+5. Job Application Tracking Dashboard [10 pts]. Add a dashboard within the extension that tracks all job applications submitted through it. The dashboard can show details like the company, job title, date applied, and application status.
+
+6. History Restoring [10 pts]. Enable users to store the filled-out forms for future submissions. (i.e., if the user fills out the form, but decides not to submit it there, the user can store it for a future submission)
+
+7. Data Transfer [10 pts]. Enable users to export and import the data to/from the local device and send over email.
+
+8. Extension Generation [10 pts]. All these must be available in a browser extension, ready to be distributed.
+
+Notes.
+
+CSS frameworks such as Bootstrap or Tailwind can be used to create a simple, user-friendly interface.
+Only HTML, CSS and JS can be used to create the extension.
+JS Libraries such as JQuery, can be used for simplicity. However, do not use anything more complex, such as React, as we will have a chance to use it in the next project.
