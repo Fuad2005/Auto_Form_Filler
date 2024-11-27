@@ -3,7 +3,10 @@
     "name": "Auto Form Filler",
     "version": "1.0",
     "description": "Fill out forms automatically",
-    "permissions": ["activeTab"],
+    "background": {
+      "scripts": ["background.js"]
+    },
+    "permissions": ["activeTab", "storage"],
     "browser_action": {
       "default_popup": "popup.html"
     },
