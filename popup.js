@@ -64,11 +64,23 @@ function getData() {
 
 
 
+// async function loadData() {
+//   const profile = document.querySelector('#profile-select').value;
+//   const response = await chrome.runtime.sendMessage({ action: 'loadData', profile });
+//   return response;
+// }
+async function loadData() {
+  const profile = document.querySelector('#profile-select').value;
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({ action: 'loadData', profile }, (response) => {
+      resolve(response);
+    });
+  });
+}
+
+
 document.getElementById('add-field').addEventListener('click', () => {
   createField();
-  const data = getData();
-  console.log(data);
-  
   
 });
 
@@ -80,4 +92,13 @@ document.querySelector('#save').addEventListener('click', () => {
   chrome.runtime.sendMessage({ action: 'saveData', data: { [profile]: data } });
   
 
+});
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+  const data = await loadData();
+  console.log(data)
 });

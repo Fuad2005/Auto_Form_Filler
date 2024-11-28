@@ -10,6 +10,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         sendResponse(result);
       });
     }
+    if (request.action === 'loadData') {
+      chrome.storage.local.get(request.data, function(result) {
+        const data = result || {};
+        
+        sendResponse(data);
+      });
+    }
+
   });
 
 
