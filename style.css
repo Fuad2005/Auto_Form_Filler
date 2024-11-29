@@ -24,8 +24,7 @@ body {
     margin-bottom: 15px;
   }
   
-  button {
-    margin-top: 5px;
+  /* button {
     padding: 5px 10px;
     background-color: #2dba4e;
     color: white;
@@ -36,5 +35,5 @@ body {
   
   button:hover {
     background-color: #35d65b;
-  }
+  } */
   

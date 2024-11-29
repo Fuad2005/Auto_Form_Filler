@@ -1,40 +1,3 @@
-// document.getElementById('add-profile').addEventListener('click', () => {
-//     const profileName = prompt('Enter a name for the new profile:');
-//     if (profileName) {
-//       let profiles = JSON.parse(localStorage.getItem('profiles')) || [];
-//       profiles.push(profileName);
-//       localStorage.setItem('profiles', JSON.stringify(profiles));
-//       updateProfileDropdown(profiles);
-//     }
-//   });
-  
-
-  // function updateProfileDropdown(profiles) {
-  //   const profileSelect = document.getElementById('profile-select');
-  //   profileSelect.innerHTML = ''; 
-  //   profiles.forEach(profile => {
-  //     const option = document.createElement('option');
-  //     option.value = profile;
-  //     option.textContent = profile;
-  //     profileSelect.appendChild(option);
-  //   });
-  // }
-  
-
-
-  // document.addEventListener('DOMContentLoaded', () => {
-  //   const profiles = JSON.parse(localStorage.getItem('profiles')) || [];
-  //   updateProfileDropdown(profiles);
-  
-  //   const fields = JSON.parse(localStorage.getItem('fields')) || [];
-  //   updateFieldsList(fields);
-  // });
-
-
-
-
-
-
 const container = document.querySelector('.input-els');
 
 
@@ -49,6 +12,10 @@ function createField() {
   newField.id = `field-${container.children.length}`;
   container.appendChild(newField);
 
+}
+
+function slugify(str) {
+  return str.replace(/ /g, '-')
 }
 
 
@@ -94,6 +61,19 @@ document.querySelector('#save').addEventListener('click', () => {
 
 });
 
+document.querySelector('#add-profile').addEventListener('click', () => {
+  const profileName = document.querySelector('#new-profile-name').value;
+  if (profileName) {
+    const profiles = document.querySelector('#profile-select');
+    const option = document.createElement('option');
+    option.value = slugify(profileName);
+    option.textContent = profileName;
+    profiles.appendChild(option);
+    document.querySelector('#new-profile-name').value = '';
+  }
+
+});
+
 
 
 
@@ -102,3 +82,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   const data = await loadData();
   console.log(data)
 });
+
+
+
+// chrome.storage.local.clear(function() {
+//   console.log('Storage cleared');
+//   chrome.runtime.reload();
+// });

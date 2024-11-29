@@ -21,11 +21,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   });
 
 
-chrome.storage.local.get('DefaultProfile', function(result) {
+chrome.storage.local.get('Default-Profile', function(result) {
   
-    if (!result['DefaultProfile']) {
-      chrome.storage.local.set({ 'DefaultProfile': {} }, function() {
-        console.log('DefaultProfile added');
+    if (!result['Default-Profile']) {
+      chrome.storage.local.set({ 'Default-Profile': {} }, function() {
+        console.log('Default-Profile added');
       });
     }
   });

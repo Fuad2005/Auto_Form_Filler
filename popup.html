@@ -11,10 +11,12 @@
   <section>
     <h2>Profiles</h2>
     <select class="form-select" id="profile-select">
-      <option value="defaultProfile">Default Profile</option>
+      <option value="Default-Profile">Default Profile</option>
     </select>
-    
-    <button id="add-profile">Add Profile</button>
+    <div class="d-flex mt-2 gap-2">
+      <input class="form-control" type="text" id="new-profile-name" placeholder="Enter new profile name">
+      <button class="btn btn-success" id="add-profile">Add</button>
+    </div>
   </section>
 
   <section>
@@ -53,11 +55,11 @@
       </div>
       
     </div>
-    <button id="add-field">Add Field</button>
+    <button class="btn btn-success mt-4" id="add-field">Add Field</button>
     <!-- <ul id="fields-list"></ul> -->
   </section>
 
-  <button id="save">Save</button>
+  <button class="btn btn-success" id="save">Save</button>
 
 
   <script src="popup.js"></script>
