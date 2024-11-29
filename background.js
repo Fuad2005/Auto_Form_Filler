@@ -1,5 +1,4 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  
     if (request.action === 'saveData') {
       chrome.storage.local.set(request.data, function() {
         console.log('Data saved');
@@ -13,9 +12,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === 'loadData') {
       chrome.storage.local.get(request.data, function(result) {
         const data = result || {};
-        
         sendResponse(data);
       });
+      return true; // Keep the message channel open
     }
 
   });
