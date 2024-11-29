@@ -75,7 +75,7 @@ function loadData(profile) {
 
 async function updateFields(profile) {
   let data = await loadData(profile);
-  console.log(data)
+  // console.log(data)
   data = data[profile] || {};
   if (data && Object.keys(data).length !== 0) {
     removeAllFields();
