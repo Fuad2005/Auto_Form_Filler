@@ -1,4 +1,5 @@
 const notification = document.querySelector('#notification');
+const snotification = document.querySelector('#snotification');
 const container = document.querySelector('.input-els');
 const requiredFields = ['name', 'surname', 'email', 'address', 'number', 'position', 'experience'];
 
@@ -119,6 +120,44 @@ async function updateFields(profile) {
 }
 
 
+function importData() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'application/json';
+
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const jsonData = JSON.parse(e.target.result);
+
+        Object.keys(jsonData).forEach((key) => {
+          chrome.runtime.sendMessage({ action: 'saveData', data: { [key]: jsonData[key] } });
+        })
+        const profile = document.querySelector('#profile-select').value;
+        updateFields(profile);
+
+        loadProfiles();
+        snotification.textContent = 'Imported Successfully';
+        snotification.style.display = 'block';
+        setTimeout(() => {
+            snotification.style.display = 'none';
+          snotification.textContent = '';
+        }, 2000);
+      };
+
+      reader.readAsText(file);
+    }
+  });
+
+  fileInput.click();
+}
+
+
+
 // DOM ------------------------------------------------------------
 
 
@@ -144,7 +183,12 @@ document.querySelector('#save').addEventListener('click', () => {
 
   } else {
     chrome.runtime.sendMessage({ action: 'saveData', data: { [profile]: data } });
-
+    snotification.textContent = 'Saved Successfully';
+    snotification.style.display = 'block';
+    setTimeout(() => {
+        snotification.style.display = 'none';
+      snotification.textContent = '';
+    }, 1000);
   }
   
 
@@ -170,6 +214,7 @@ document.querySelector('#profile-select').addEventListener('change', () => {
 })
 
 
+document.querySelector('#importDataButton').addEventListener('click', importData);
 
 
 
