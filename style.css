@@ -33,7 +33,15 @@ body {
     cursor: pointer;
   }
   
+  button#exportDataButton{
+    background-color: #502dba;
+  }
+  
+  #exportDataButton:hover{
+    background-color: #7e53ff;
+  }
+
   button:hover {
     background-color: #35d65b;
-  } */
-  
+  } 
+   */

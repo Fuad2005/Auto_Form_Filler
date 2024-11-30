@@ -1,3 +1,4 @@
+const notification = document.getElementById("notification");
 const container = document.querySelector('.input-els');
 
 // Functions -------------------------------------------------------
@@ -141,3 +142,28 @@ document.addEventListener('DOMContentLoaded', function () {
 //   console.log('Storage cleared');
 //   chrome.runtime.reload();
 // });
+
+//Extract data as json
+exportDataButton.addEventListener('click', function () {
+  chrome.storage.local.get(null, (data) => {
+      if (data && Object.keys(data).length > 0) {
+          const jsonString = JSON.stringify(data, null, 2);
+          const blob = new Blob([jsonString], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+
+          chrome.downloads.download({
+              url: url,
+              filename: 'AllProfilesData.json',
+              saveAs: true 
+          }, function () {
+              URL.revokeObjectURL(url);
+          });
+
+      } else {
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000); 
+    }
+  });
+});
