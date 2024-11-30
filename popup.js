@@ -1,7 +1,21 @@
-const notification = document.getElementById("notification");
+const notification = document.querySelector('#notification');
 const container = document.querySelector('.input-els');
+const requiredFields = ['name', 'surname', 'email', 'address']
 
 // Functions -------------------------------------------------------
+
+
+
+
+
+function createDefFields() {
+  const fieldNames = ['name', 'surname', 'email', 'address', 'number', 'position', 'experience'];
+  fieldNames.forEach((fieldName) => {
+    createField(fieldName);
+  });
+}
+
+
 function createField(fieldName='', valueName='') {
   const newField = document.createElement('div');
   newField.classList.add('d-flex', 'gap-2');
@@ -18,14 +32,20 @@ function createField(fieldName='', valueName='') {
       <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
     </svg>
   `
-  deleteButton.id = `remove-field-${container.children.length}`;
-  newField.appendChild(deleteButton);
-  newField.id = `field-${container.children.length}`;
-  container.appendChild(newField);
-
-  deleteButton.addEventListener('click', () => {
-    container.removeChild(newField);
-  });
+  const fieldInput = newField.querySelector('input[name="field"]');
+  if (requiredFields.includes(fieldInput.value)) {
+    newField.id = `field-${container.children.length}`;
+    container.appendChild(newField);
+  } else {
+    deleteButton.id = `remove-field-${container.children.length}`;
+    newField.appendChild(deleteButton);
+    newField.id = `field-${container.children.length}`;
+    container.appendChild(newField);
+  
+    deleteButton.addEventListener('click', () => {
+      container.removeChild(newField);
+    });
+  }
 
 }
 
@@ -43,11 +63,17 @@ function slugify(str) {
 function getData() {
   const data = {};
   Array.from(container.children).forEach((field) => {
-    const fieldName = field.querySelector('input[name="field"]').value;
-    const fieldValue = field.querySelector('input[name="value"]').value;
+    const fieldName = field.querySelector('input[name="field"]').value.trim();
+    const fieldValue = field.querySelector('input[name="value"]').value.trim();
     data[fieldName] = fieldValue;
   });
-  return data;
+
+  if (Object.values(data).some((value) => value === '')) {
+    return 'Error: Some fields are empty.';
+  } else {
+    return data;
+  }
+
 }
 
 async function loadProfiles() {
@@ -80,10 +106,13 @@ async function updateFields(profile) {
   data = data[profile] || {};
   if (data && Object.keys(data).length !== 0) {
     removeAllFields();
+    Object.keys(data).forEach((key) => {
+      createField(key, data[key]);
+    });
+  } else {
+    removeAllFields();
+    createDefFields();
   }
-  Object.keys(data).forEach((key) => {
-    createField(key, data[key]);
-  });
 }
 
 
@@ -100,7 +129,20 @@ document.querySelector('#save').addEventListener('click', () => {
   const profile = document.querySelector('#profile-select').value;
   const data = getData();
   console.log(data);
-  chrome.runtime.sendMessage({ action: 'saveData', data: { [profile]: data } });
+  if (typeof data === 'string') {
+    notification.textContent = data;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+      notification.textContent = '';
+
+    }, 3000); 
+    
+
+  } else {
+    chrome.runtime.sendMessage({ action: 'saveData', data: { [profile]: data } });
+
+  }
   
 
 });
@@ -160,9 +202,11 @@ exportDataButton.addEventListener('click', function () {
           });
 
       } else {
+        notification.textContent = 'No data to export';
         notification.style.display = 'block';
         setTimeout(() => {
             notification.style.display = 'none';
+          notification.textContent = '';
         }, 3000); 
     }
   });
