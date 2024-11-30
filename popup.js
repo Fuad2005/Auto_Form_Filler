@@ -1,6 +1,6 @@
 const notification = document.querySelector('#notification');
 const container = document.querySelector('.input-els');
-const requiredFields = ['name', 'surname', 'email', 'address']
+const requiredFields = ['name', 'surname', 'email', 'address', 'number', 'position', 'experience'];
 
 // Functions -------------------------------------------------------
 
@@ -15,8 +15,7 @@ function createDefFields() {
   });
 }
 
-
-function createField(fieldName='', valueName='') {
+function createField(fieldName = '', valueName = '') {
   const newField = document.createElement('div');
   newField.classList.add('d-flex', 'gap-2');
   newField.innerHTML = `
@@ -34,8 +33,12 @@ function createField(fieldName='', valueName='') {
   `
   const fieldInput = newField.querySelector('input[name="field"]');
   if (requiredFields.includes(fieldInput.value)) {
+    deleteButton.id = `remove-field-${container.children.length}`;
+    deleteButton.setAttribute('disabled', true);
+    newField.appendChild(deleteButton);
     newField.id = `field-${container.children.length}`;
     container.appendChild(newField);
+  
   } else {
     deleteButton.id = `remove-field-${container.children.length}`;
     newField.appendChild(deleteButton);
@@ -121,7 +124,7 @@ async function updateFields(profile) {
 
 document.getElementById('add-field').addEventListener('click', () => {
   createField();
-  
+
 });
 
 
@@ -211,3 +214,118 @@ exportDataButton.addEventListener('click', function () {
     }
   });
 });
+// Cover letter
+
+
+document.getElementById('generate-cover-letter-btn').addEventListener('click', () => {
+  document.getElementById('cover-letter-form').style.display = 'block';
+});
+
+document.getElementById('cancel-cover-letter-btn').addEventListener('click', () => {
+  document.getElementById('cover-letter-form').style.display = 'none';
+});
+
+document.getElementById('send-cover-letter-btn').addEventListener('click', async () => {
+  const jobTitle = document.getElementById('job-title').value;
+  const jobPlatform = document.getElementById('ad-platform').value;
+  const hirerAddress = document.getElementById('hirer-address').value;
+  const previousJobs = document.getElementById('previous-jobs').value;
+  const specificSkills = document.getElementById('specific-skills').value;
+  const aboutYourself = document.getElementById('about-yourself').value;
+
+  const selectedProfile = document.querySelector('#profile-select').value;
+  const allData = await loadData(null);
+  const profileData = allData[selectedProfile] || {};
+
+  const name = `${profileData['name'] || 'Your'} ${profileData['surname'] || 'Name'}`;
+  const experience = profileData['experience'] || 'Your Experience';
+  const email = profileData['email'] || 'Your Email';
+  const number = profileData['number'] || 'Your Number';
+  const position = profileData['position'] || 'Your position';
+
+  if (!jobTitle || !previousJobs || !aboutYourself || !jobPlatform || !hirerAddress || !specificSkills) {
+    alert('Please fill all the fields.');
+    return;
+  }
+
+  const prompt = `
+  Generate a professional and complete cover letter for the job title "${jobTitle}" using only the information provided below.
+  - Previous job roles: ${previousJobs}
+  - Where I saw the add: ${jobPlatform}
+  - Hirer Address: ${hirerAddress}
+  - Specific Skills and Tech: ${specificSkills}
+  - About me and achievements: ${aboutYourself}
+  - Date: ${new Date().toISOString().split('T')[0]}
+  - Name: ${name}
+  - Experience: ${experience}
+  - Email: ${email}
+  - Phone number: ${number}
+  - Position: ${position}
+
+  Ensure:
+  1. The letter is polished and ready to send.
+  2. There are no placeholder fields or sections requiring manual input.
+  3. Do not include any text requesting additional details, only use the provided data.
+  4. Dont make comments about how cover letter should be. Work with the info provided only.
+`;
+
+
+  console.log(prompt);
+
+
+  try {
+    const coverLetter = await sendPromptToGemini(prompt);
+
+    console.log(coverLetter);
+
+
+    downloadCoverLetter(coverLetter);
+  } catch (error) {
+    console.error('Error generating cover letter:', error);
+    alert('Failed to generate the cover letter.');
+  }
+});
+
+async function sendPromptToGemini(prompt) {
+
+  const payload = JSON.stringify({
+    contents: [
+      {
+        parts: [
+          { text: prompt }
+        ]
+      }
+    ]
+  });
+
+  const apiKey = 'YOUR-API-KEY';
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: payload
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to communicate with the API');
+  }
+
+  const data = await response.json();
+  console.log(data);
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text;
+}
+
+function downloadCoverLetter(text) {
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const filename = 'cover_letter.txt';
+
+  chrome.downloads.download({
+    url: url,
+    filename: filename,
+    saveAs: true
+  }, () => {
+    URL.revokeObjectURL(url);
+  });
+}
