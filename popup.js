@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //Extract data as json
 exportDataButton.addEventListener('click', function () {
   chrome.storage.local.get(null, (data) => {
-      if (data && Object.keys(data).length > 0) {
+      if (data && Object.keys(data).length > 0) { 
           const jsonString = JSON.stringify(data, null, 2);
           const blob = new Blob([jsonString], { type: "application/json" });
           const url = URL.createObjectURL(blob);
