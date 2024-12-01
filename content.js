@@ -65,3 +65,23 @@ function getFormElements() {
 
 
   
+  //dashboard
+
+document.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const currentUrl = window.location.href;
+  const applicationData = {
+    url: currentUrl,
+    dateApplied: new Date().toISOString().split('T')[0],
+    status: "Pending" 
+  };
+
+  chrome.storage.local.get({ applications: [] }, (result) => {
+    const applications = result.applications;
+    applications.push(applicationData);
+    chrome.storage.local.set({ applications });
+    console.log("Application saved:", applicationData);
+  });
+});
+
