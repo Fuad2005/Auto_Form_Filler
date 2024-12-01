@@ -16,9 +16,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   
         if (fieldValue) {
           console.log(`${fieldName} : ${fieldValue}`);
-          if (fullname && fieldName === 'name') {
+          if (fullname && (fieldName.toLowerCase() === 'name' || fieldName.toLowerCase() === 'fullname')) {
             formElements[field].value = fullname;
-          } else {
+          } 
+          else if (fieldName.toLowerCase() === 'firstname' || fieldName.toLowerCase() === 'name') {
+            formElements[field].value = formData.name;
+          }
+          else if (fieldName.toLowerCase() === 'lastname' || fieldName.toLowerCase() === 'surname') {
+            formElements[field].value = formData.surname;
+          }
+          else if (fieldName.toLowerCase() === 'phone' || fieldName.toLowerCase() === 'number' || fieldName.toLowerCase() === 'phonenumber') {
+            formElements[field].value = formData.phone;
+          }
+          
+          else {
               formElements[field].value = fieldValue;
           }
         } else {
