@@ -31,3 +31,14 @@ chrome.storage.local.get('Default-Profile', function(result) {
 
 
 
+chrome.storage.local.get('applications', function(result) {
+  
+    if (!result['applications']) {
+      chrome.storage.local.set({ 'applications': [] }, function() {
+        console.log('applications added');
+      });
+    }
+  });
+
+
+

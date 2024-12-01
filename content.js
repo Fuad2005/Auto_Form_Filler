@@ -48,6 +48,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function getFormElements() {
     const form = document.querySelector('form');
     const formElements = form.elements;
+    // const inputs = document.querySelectorAll('input');
+    // const formElements = Array.from(inputs);
   
     // Array.from(formElements).forEach(element => {
     //     element.value = 'test';
