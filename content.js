@@ -4,28 +4,29 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       const formData = request.data;
       const [pageForm, formElements] = getFormElements();
       let fullname = null
-    //   console.log('surname' in pageForm)
-      if (!('surname' in pageForm || 'lastname' in pageForm)) {
+      if (!('surname' in pageForm || 'last_name' in pageForm)) {
            fullname = formData.name + ' ' + formData.surname;
       }
-      console.log(fullname)
       
       Object.keys(pageForm).forEach((field) => {
-        const fieldName = field;
-        const fieldValue = formData[fieldName];
-  
+        const fieldId = field;
+        const fieldValue = formData[fieldId];
+
+        
+
+
         if (fieldValue) {
-          console.log(`${fieldName} : ${fieldValue}`);
-          if (fullname && (fieldName.toLowerCase() === 'name' || fieldName.toLowerCase() === 'fullname')) {
+        //   console.log(`${fieldId} : ${fieldValue}`);
+          if (fullname && (fieldId.toLowerCase() === 'name' || fieldId.toLowerCase() === 'full_name' || fieldId.toLowerCase() === 'fullname')) {
             formElements[field].value = fullname;
           } 
-          else if (fieldName.toLowerCase() === 'firstname' || fieldName.toLowerCase() === 'name') {
-            formElements[field].value = formData.name;
+          else if (fieldId.toLowerCase() === 'first_name' || fieldId.toLowerCase() === 'name' || fieldId.toLowerCase() === 'firstname') {
+            formElements[field].value = formData.first_name;
           }
-          else if (fieldName.toLowerCase() === 'lastname' || fieldName.toLowerCase() === 'surname') {
-            formElements[field].value = formData.surname;
+          else if (fieldId.toLowerCase() === 'last_name' || fieldId.toLowerCase() === 'lastname' || fieldId.toLowerCase() === 'surname') {
+            formElements[field].value = formData.last_name;
           }
-          else if (fieldName.toLowerCase() === 'phone' || fieldName.toLowerCase() === 'number' || fieldName.toLowerCase() === 'phonenumber') {
+          else if (fieldId.toLowerCase() === 'phone' || fieldId.toLowerCase() === 'number' || fieldId.toLowerCase() === 'phone_number') {
             formElements[field].value = formData.phone;
           }
           
@@ -33,7 +34,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
               formElements[field].value = fieldValue;
           }
         } else {
-          console.log(`${fieldName} ---------------`);
+        //   console.log(`${fieldId} ---------------`);
         }
       });
         
@@ -55,8 +56,8 @@ function getFormElements() {
     const pageFormData = {};
 
     Array.from(formElements).forEach(element => {
-        if (element.name) {
-        pageFormData[element.name] = element.value;
+        if (element.id) {
+        pageFormData[element.id] = element.value;
         }
     });
 
