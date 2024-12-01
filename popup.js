@@ -1,7 +1,7 @@
 const notification = document.querySelector('#notification');
 const snotification = document.querySelector('#snotification');
 const container = document.querySelector('.input-els');
-const requiredFields = ['name', 'surname', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
+const requiredFields = ['first_name', 'last_name', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
 
 // Functions -------------------------------------------------------
 
@@ -10,7 +10,7 @@ const requiredFields = ['name', 'surname', 'email', 'address', 'phone', 'positio
 
 
 function createDefFields() {
-  const fieldNames = ['name', 'surname', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
+  const fieldNames = ['first_name', 'last_name', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
   fieldNames.forEach((fieldName) => {
     createField(fieldName);
   });
@@ -326,7 +326,7 @@ document.getElementById('send-cover-letter-btn').addEventListener('click', async
 `;
 
 
-  console.log(prompt);
+  // console.log(prompt);
 
 
   try {
@@ -368,7 +368,7 @@ async function sendPromptToGemini(prompt) {
   }
 
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
   return data?.candidates?.[0]?.content?.parts?.[0]?.text;
 }
 
