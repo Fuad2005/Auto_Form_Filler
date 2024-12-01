@@ -247,7 +247,11 @@ document.addEventListener('DOMContentLoaded', function () {
 //Extract data as json
 exportDataButton.addEventListener('click', function () {
   chrome.storage.local.get(null, (data) => {
-      if (data && Object.keys(data).length > 0 && !Object.keys(data).includes('applications')) { 
+      if (data && Object.keys(data).length > 0) { 
+          data = Object.keys(data).filter(key => key !== 'applications').reduce((obj, key) => {
+            obj[key] = data[key];
+            return obj;
+          }, {});
           const jsonString = JSON.stringify(data, null, 2);
           const blob = new Blob([jsonString], { type: "application/json" });
           const url = URL.createObjectURL(blob);
@@ -354,7 +358,7 @@ async function sendPromptToGemini(prompt) {
     ]
   });
 
-  const apiKey = 'YOUR-API-KEY';
+  const apiKey = 'YOUR_API_KEY';
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
     method: "POST",
     headers: {
