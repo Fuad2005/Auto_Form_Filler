@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    select {
+      padding: 5px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Job Application Tracking Dashboard</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Application URL</th>
+        <th>Date Applied</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="applicationList"></tbody>
+  </table>
+
+  <script>
+    // Load applications from Chrome storage and display them
+    chrome.storage.local.get({ applications: [] }, (result) => {
+      const applications = result.applications;
+      const applicationList = document.getElementById('applicationList');
+
+      applications.forEach((app, index) => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td><a href="${app.url}" target="_blank">${app.url}</a></td>
+          <td>${app.dateApplied}</td>
+          <td>
+            <select data-index="${index}" class="status-selector">
+              <option value="Pending" ${app.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="Interview" ${app.status === 'Interview' ? 'selected' : ''}>Interview</option>
+              <option value="Offer Received" ${app.status === 'Offer Received' ? 'selected' : ''}>Offer Received</option>
+              <option value="Rejected" ${app.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+            </select>
+          </td>
+        `;
+
+        applicationList.appendChild(row);
+      });
+    });
+
+    // Update status in Chrome storage when the user selects a new status
+    document.addEventListener('change', (event) => {
+      if (event.target.classList.contains('status-selector')) {
+        const index = event.target.dataset.index;
+        const newStatus = event.target.value;
+
+        chrome.storage.local.get({ applications: [] }, (result) => {
+          const applications = result.applications;
+          applications[index].status = newStatus;
+          chrome.storage.local.set({ applications });
+          console.log("Status updated:", applications[index]);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
