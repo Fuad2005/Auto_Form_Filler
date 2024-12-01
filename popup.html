@@ -41,7 +41,7 @@
   <button class="btn btn-primary" id="importDataButton">Import From JSON</button>
   <br>
   <section>
-    <button class="btn btn-primary mt-4" id="generate-cover-letter-btn">Generate Cover Letter</button>
+    <button class="btn btn-primary mt-4 w-100" id="generate-cover-letter-btn">Generate Cover Letter</button>
     
     <div id="cover-letter-form" class="mt-2" style="display:none;">
       <h2>Generate Cover Letter</h2>
@@ -49,12 +49,14 @@
       <input class="form-control mb-2" type="text" id="ad-platform" placeholder="Platform where you saw the job"> 
       <input class="form-control mb-2" type="text" id="hirer-address" placeholder="Hirer Address">
       <input class="form-control mb-2" type="text" id="previous-jobs" placeholder="Previous Jobs (comma-separated)">
-      <textarea class="form-control mb-2" id="specific-skills" placeholder="Specific Skills and Technologies"></textarea>
+      <!-- <textarea class="form-control mb-2" id="specific-skills" placeholder="Specific Skills and Technologies"></textarea> -->
       <textarea class="form-control mb-2" id="about-yourself" placeholder="About Yourself & Achievements"></textarea>
       <button class="btn btn-success" id="send-cover-letter-btn">Send</button>
       <button class="btn btn-danger" id="cancel-cover-letter-btn">Cancel</button>
     </div>
   </section>
+
+  <button class="btn btn-success w-100" id="fill">Fill</button>
   
 
   <script src="popup.js"></script>

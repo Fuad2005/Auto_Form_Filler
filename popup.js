@@ -1,7 +1,7 @@
 const notification = document.querySelector('#notification');
 const snotification = document.querySelector('#snotification');
 const container = document.querySelector('.input-els');
-const requiredFields = ['name', 'surname', 'email', 'address', 'number', 'position', 'experience'];
+const requiredFields = ['name', 'surname', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
 
 // Functions -------------------------------------------------------
 
@@ -10,7 +10,7 @@ const requiredFields = ['name', 'surname', 'email', 'address', 'number', 'positi
 
 
 function createDefFields() {
-  const fieldNames = ['name', 'surname', 'email', 'address', 'number', 'position', 'experience'];
+  const fieldNames = ['name', 'surname', 'email', 'address', 'phone', 'position', 'experience', 'education', 'skills'];
   fieldNames.forEach((fieldName) => {
     createField(fieldName);
   });
@@ -166,6 +166,17 @@ document.getElementById('add-field').addEventListener('click', () => {
 
 });
 
+document.querySelector('#fill').addEventListener('click', async () => {
+  const profile = document.querySelector('#profile-select').value;
+  let data = await loadData(profile)
+  data = data[profile] || {};
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { action: 'getPopupData', data: data }, function(response) {
+      console.log(response);
+    });
+  });
+})
+
 
 document.querySelector('#save').addEventListener('click', () => {
   const profile = document.querySelector('#profile-select').value;
@@ -275,18 +286,18 @@ document.getElementById('send-cover-letter-btn').addEventListener('click', async
   const jobPlatform = document.getElementById('ad-platform').value;
   const hirerAddress = document.getElementById('hirer-address').value;
   const previousJobs = document.getElementById('previous-jobs').value;
-  const specificSkills = document.getElementById('specific-skills').value;
   const aboutYourself = document.getElementById('about-yourself').value;
-
+  
   const selectedProfile = document.querySelector('#profile-select').value;
   const allData = await loadData(null);
   const profileData = allData[selectedProfile] || {};
-
+  
   const name = `${profileData['name'] || 'Your'} ${profileData['surname'] || 'Name'}`;
   const experience = profileData['experience'] || 'Your Experience';
   const email = profileData['email'] || 'Your Email';
-  const number = profileData['number'] || 'Your Number';
+  const phone = profileData['phone'] || 'Your phone';
   const position = profileData['position'] || 'Your position';
+  const specificSkills = profileData['skills'] || 'Your skills';
 
   if (!jobTitle || !previousJobs || !aboutYourself || !jobPlatform || !hirerAddress || !specificSkills) {
     alert('Please fill all the fields.');
@@ -304,7 +315,7 @@ document.getElementById('send-cover-letter-btn').addEventListener('click', async
   - Name: ${name}
   - Experience: ${experience}
   - Email: ${email}
-  - Phone number: ${number}
+  - Phone number: ${phone}
   - Position: ${position}
 
   Ensure:
